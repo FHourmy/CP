@@ -1,7 +1,7 @@
 # Résumé de l'application
-L'application contient 2 pages ("/" et "/welcome")
-"/" contient un logo (logo identiques pour les partenaires P1 et P3, logo P2 pour le partenaire P2) et un formulaire nom/prenom/submit qui redirige vers "/welcome".
-"/welcome" est accesible via le formulaire (sinon redirection vers "/") qui affiche le même Logo que "/" et un texte  ("Bonjour prenom NOM" pour P1 et P2 et "Bonsoir prenom NOM" pour P3)
+L'application contient 2 pages ("/" et "/welcome").
+- "/" contient un logo (logo identiques pour les partenaires P1 et P3, logo P2 pour le partenaire P2) et un formulaire nom/prenom/submit qui redirige vers "/welcome".
+- "/welcome" est accesible via le formulaire (sinon redirection vers "/") qui affiche le même Logo que "/" et un texte  ("Bonjour prenom NOM" pour P1 et P2 et "Bonsoir prenom NOM" pour P3)
 
 #Installation et execution
 cloner le projet et lancer la commande :
@@ -25,21 +25,21 @@ npm run build:P2
 ```
 vous pourrez ensuite exécuter l'application avec la commande
 ```
-// dossier build par défaut, si utilisation des commandes build:P1, buildP2... lancer le dossier adéquat (buildPA, buildP2, ...) 
+// dossier build par défaut, si utilisation des commandes build:P1, buildP2... lancer le dossier adéquat (buildP1, buildP2, ...) 
 serve -s build
 ```
 
 # Partie 1 : Résolution de la problématique
 ## Solution défini
-Pour rendre paramétrable l'application a chaque partenaire et fournir un build propre à chacun nous utilisons ici plusieurs méchanisme :
-1) Mis en place d'un dossier ressource pour chaque partenaire contenant les différences potentielles (dictionnaire, logo dans notre cas). Un dossier "défaut" est mis en place dans un soucis de scalabilité pour ne pas avoir a répéter des valeurs identiques à la majorité des partenaires. (difficulté d'implémentation pour les images, voir point Difficulté d'implémentation)
+Pour rendre paramétrable l'application à chaque partenaire et fournir un build propre à chacun nous utilisons ici plusieurs méchanismes :
+1) Mise en place d'un dossier ressource pour chaque partenaire contenant les différences potentielles (dictionnaire et logo dans notre cas). Un dossier "défaut" est mis en place dans un soucis de scalabilité pour ne pas avoir a répéter des valeurs identiques à la majorité des partenaires. (difficulté d'implémentation pour les images, voir point Difficulté d'implémentation)
 2) Injection du nom du partenaire spécifique au build par une variable d'environnement
 3) Récupération des ressources (dictionnaire, logo) propres du partenaire au runtime (les assets des autres partenaire devraient être supprimés dans un soucis de confidentialité lors du build, mais non implémenté) grâce au nom injecté au build
 4) Utiliser les ressources récupérées à l'endroit voulu
 
 ## Commentaire sur la problématique et son traitement
-Le sujet étant accès front-end, la réponse données est entièrement gérée en front-end. Cependant la gestion des ressources ici faite côté client (différents répertoires public / resources pour les partenaires) devrait être selon moi déportée dans le backend et récupéré grâce à une clé client Pour éviter d'avoir un client très lourd en cas de nombre important de ressources. Exemple simplifié :
-front envoie une requete get Ressources(P1) au back => back retourne dictionnaire et logo adapté.
+Le sujet étant accès front-end, la réponse données est entièrement gérée en front-end. Cependant la gestion des ressources ici faite côté client (différents répertoires public / resources pour les partenaires) devrait être selon moi déportée dans le backend et récupérée grâce à une clé client (ceci permet d'alléger la taille du build front end, d'éviter certains problèmes d'implémentations et de plus simplement gérer une éventuelle problématique de confidentialité des ressources de chaque partenaire). Exemple simplifié :
+Le front envoie une requete get Ressources(P1) au back => back retourne dictionnaire et logo adapté.
 
 ## Difficulté d'implémentation
 L'import d'images locales (logo) (stockées dans le front) dynamique n'est pas pratique en React (car webpack ne peut mapper correctement les images au code que au build, et les imports dynamiques empêchent le bon déroulement de ce process). 
