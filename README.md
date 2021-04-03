@@ -47,3 +47,20 @@ L'import d'image locale (logo) (stockées dans le front) dynamique n'est pas pra
 # Partie 3 : CD
 Pour faciliter le déploiement continue, en partant du principe que l'on désire un build propre à chaque partenaire, on a injecté le nom du partenaire au moment du build (voir partie 1 étape 2). Des scripts ont été mis en place pour générer ces builds (npm run build:P1, npm run build P2, ...). Pour améliorer encore le process, un script devrait générer les builds de tous les partenaires en fonction d'une liste de partenaire données (non implémenté) plutot que d'avoir un script par partenaire.
 
+
+# Screenshots
+
+## Dev (combobox pour choisir le partenaire)
+![image](https://user-images.githubusercontent.com/34136072/113478090-e39a4980-9486-11eb-977d-c2ac689dd66c.png)
+
+## Prod P1
+![image](https://user-images.githubusercontent.com/34136072/113478048-a5048f00-9486-11eb-8263-3828855e6af5.png)
+
+## Prod P2
+![image](https://user-images.githubusercontent.com/34136072/113478066-ba79b900-9486-11eb-91dc-dce2c5fd4dd9.png)
+
+## Prod P3
+![image](https://user-images.githubusercontent.com/34136072/113478076-c8c7d500-9486-11eb-8018-3f13e5ac7163.png)
+
+
+
