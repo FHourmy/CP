@@ -38,7 +38,7 @@ Pour rendre paramétrable l'application a chaque partenaire et fournir un build 
 4) Utiliser les ressources récupérées à l'endroit voulu
 
 ## Commentaire sur la problématique et son traitement
-Le sujet étant accès front-end, la réponse données est entièrement géré en front-end. Cependant la gestion des ressources ici fait côté client (différents répertoires public / resources pour les partenaires) devrait être déporté dans le backend et récupéré grâce à une clé client. Exemple simplifié :
+Le sujet étant accès front-end, la réponse données est entièrement gérée en front-end. Cependant la gestion des ressources ici faite côté client (différents répertoires public / resources pour les partenaires) devrait être selon moi déportée dans le backend et récupéré grâce à une clé client Pour éviter d'avoir un client très lourd en cas de nombre important de ressources. Exemple simplifié :
 front envoie une requete get Ressources(P1) au back => back retourne dictionnaire et logo adapté.
 
 ## Difficulté d'implémentation
