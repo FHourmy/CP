@@ -42,7 +42,7 @@ Le sujet étant accès front-end, la réponse données est entièrement gérée 
 Le front envoie une requete get Ressources(P1) au back => back retourne dictionnaire et logo adapté.
 
 ## Difficulté d'implémentation
-L'import d'images locales (logo) (stockées dans le front) dynamique n'est pas pratique en React (car webpack ne peut mapper correctement les images au code que au build, et les imports dynamiques empêchent le bon déroulement de ce process). 
+L'import d'images locales (logo) (stockées dans le front) dynamique n'est pas pratique en React (car webpack ne peut mapper correctement les images au code que au build, et pour cela a besoin d'avoir un import avec un chemin en "dur". Les imports dynamiques ne permettent pas le bon déroulement de ce process). 
 
 Du à cela au lieu d'avoir des dossiers src/ressources/(default - P1 - P2 - P3) contenant chacun dictionaire et logo quand nécéssaire, les logos ont été mis dans le dossier /public/nomdupartenaire et chaque partenaire doit obligatoirement avoir un logo dans son dossier (donc P1 et P3 bien qu'utilisant le même logo utilise 2 ressources différentes copiées collées)
 
