@@ -42,7 +42,11 @@ Le sujet étant accès front-end, la réponse données est entièrement géré e
 front envoie une requete get Ressources(P1) au back => back retourne dictionnaire et logo adapté.
 
 ## Difficulté d'implémentation
-L'import d'image locale (logo) (stockées dans le front) dynamique n'est pas pratique en React. (raison de plus pour déporter à un back). Du à cela au lieu d'avoir des dossier src/ressources/(default - P1 - P2 - P3) contenant chacun dictionaire et logo quand nécéssaire, les logos ont été mis dans le dossier /public/nomdupartenaire et chaque partenaire doit obligatoirement avoir un logo (donc P1 et P3 bien qu'utilisant le même logo utilise 2 ressources différentes copiées collées)
+L'import d'images locales (logo) (stockées dans le front) dynamique n'est pas pratique en React (car webpack ne peut mapper correctement les images au code que au build, et les imports dynamiques empêchent le bon déroulement de ce process). 
+
+Du à cela au lieu d'avoir des dossiers src/ressources/(default - P1 - P2 - P3) contenant chacun dictionaire et logo quand nécéssaire, les logos ont été mis dans le dossier /public/nomdupartenaire et chaque partenaire doit obligatoirement avoir un logo dans son dossier (donc P1 et P3 bien qu'utilisant le même logo utilise 2 ressources différentes copiées collées)
+
+Une autre solution, plus élégante mais pouvant entrainer des problèmes de latence de chargement, aurait put être d'héberger les images ailleurs et de ne conserver que leurs urls dans le dossier ressources.
 
 # Partie 3 : CD
 Pour faciliter le déploiement continue, en partant du principe que l'on désire un build propre à chaque partenaire, on a injecté le nom du partenaire au moment du build (voir partie 1 étape 2). Des scripts ont été mis en place pour générer ces builds (npm run build:P1, npm run build P2, ...). Pour améliorer encore le process, un script devrait générer les builds de tous les partenaires en fonction d'une liste de partenaire données (non implémenté) plutot que d'avoir un script par partenaire.
