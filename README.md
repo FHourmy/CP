@@ -1,70 +1,49 @@
-# Getting Started with Create React App
+# Résumé de l'application
+L'application contient 2 pages ("/" et "/welcome")
+"/" contient un logo (logo identiques pour les partenaires P1 et P3, logo P2 pour le partenaire P2) et un formulaire nom/prenom/submit qui redirige vers "/welcome".
+"/welcome" est accesible via le formulaire (sinon redirection vers "/") qui affiche le même Logo que "/" et un texte  ("Bonjour prenom NOM" pour P1 et P2 et "Bonsoir prenom NOM" pour P3)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+#Installation et execution
+cloner le projet et lancer la commande :
+```
+npm install
+```
+## Développement
+pour lancer le projet 
+```
+npm run start
+```
+En développement vous aurez accès a une combobox permettant de choisir le partenaire
 
-## Available Scripts
+## Production
+pour build le projet 
+```
+// par défaut partenaire P1
+npm run build
+// ou pour un partenaire particulier build:partenaire, exemple :
+npm run build:P2
+```
+vous pourrez ensuite exécuter l'application avec la commande
+```
+// dossier build par défaut, si utilisation des commandes build:P1, buildP2... lancer le dossier adéquat (buildPA, buildP2, ...) 
+serve -s build
+```
 
-In the project directory, you can run:
+# Partie 1 : Résolution de la problématique
+## Solution défini
+Pour rendre paramétrable l'application a chaque partenaire et fournir un build propre à chacun nous utilisons ici plusieurs méchanisme :
+1) Mis en place d'un dossier ressource pour chaque partenaire contenant les différences potentielles (dictionnaire, logo dans notre cas). Un dossier "défaut" est mis en place dans un soucis de scalabilité pour ne pas avoir a répéter des valeurs identiques à la majorité des partenaires. (difficulté d'implémentation pour les images, voir point Difficulté d'implémentation)
+2) Injection du nom du partenaire spécifique au build par une variable d'environnement
+3) Récupération des ressources (dictionnaire, logo) propres du partenaire au runtime (les assets des autres partenaire devraient être supprimés dans un soucis de confidentialité lors du build, mais non implémenté) grâce au nom injecté au build
+4) Utiliser les ressources récupérées à l'endroit voulu
 
-### `yarn start`
+## Commentaire sur la problématique et son traitement
+Le sujet étant accès front-end, la réponse données est entièrement géré en front-end. Cependant la gestion des ressources ici fait côté client (différents répertoires public / resources pour les partenaires) devrait être déporté dans le backend et récupéré grâce à une clé client. Exemple simplifié :
+front envoie une requete get Ressources(P1) au back => back retourne dictionnaire et logo adapté.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Difficulté d'implémentation
+L'import d'image locale (logo) (stockées dans le front) dynamique n'est pas pratique en React. (raison de plus pour déporter à un back). Du à cela au lieu d'avoir des dossier src/ressources/(default - P1 - P2 - P3) contenant chacun dictionaire et logo quand nécéssaire, les logos ont été mis dans le dossier /public/nomdupartenaire et chaque partenaire doit obligatoirement avoir un logo (donc P1 et P3 bien qu'utilisant le même logo utilise 2 ressources différentes copiées collées)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+# Partie 3 : CD
+Pour faciliter le déploiement continue, en partant du principe que l'on désire un build propre à chaque partenaire, on a injecté le nom du partenaire au moment du build (voir partie 1 étape 2). Des scripts ont été mis en place pour générer ces builds (npm run build:P1, npm run build P2, ...). Pour améliorer encore le process, un script devrait générer les builds de tous les partenaires en fonction d'une liste de partenaire données (non implémenté) plutot que d'avoir un script par partenaire.
 
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
