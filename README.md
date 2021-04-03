@@ -33,7 +33,7 @@ serve -s build
 ## Solution défini
 Pour rendre paramétrable l'application à chaque partenaire et fournir un build propre à chacun nous utilisons ici plusieurs méchanismes :
 1) Mise en place d'un dossier ressource pour chaque partenaire contenant les différences potentielles (dictionnaire et logo dans notre cas). Un dossier "défaut" est mis en place dans un soucis de scalabilité pour ne pas avoir a répéter des valeurs identiques à la majorité des partenaires. (difficulté d'implémentation pour les images, voir point Difficulté d'implémentation)
-2) Injection du nom du partenaire spécifique au build par une variable d'environnement **ATTENTION les scripts implémentées ne fonctionne que sous windows**
+2) Injection du nom du partenaire spécifique au build par une variable d'environnement **ATTENTION les scripts implémentés ne fonctionne que sous windows**
 3) Récupération des ressources (dictionnaire, logo) propres du partenaire au runtime (les assets des autres partenaire devraient être supprimés dans un soucis de confidentialité lors du build, mais non implémenté) grâce au nom injecté au build
 4) Utiliser les ressources récupérées à l'endroit voulu
 
