@@ -1,70 +1,87 @@
-# Getting Started with Create React App
+# Résumé de l'application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+L'application contient 2 pages ("/" et "/welcome").
 
-## Available Scripts
+- "/" contient un logo (logo identiques pour les partenaires P1 et P3, logo P2 pour le partenaire P2) et un formulaire nom/prenom/submit qui redirige vers "/welcome".
+- "/welcome" est accesible via le formulaire (sinon redirection vers "/") qui affiche le même Logo que "/" et un texte ("Bonjour prenom NOM" pour P1 et P2 et "Bonsoir prenom NOM" pour P3)
 
-In the project directory, you can run:
+#Installation et execution
+cloner le projet et lancer la commande :
 
-### `yarn start`
+```
+npm install
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Développement
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+pour lancer le projet
 
-### `yarn test`
+```
+npm run start
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+En développement vous aurez accès a une combobox permettant de choisir le partenaire
 
-### `yarn build`
+## Production
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+pour build le projet
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
+// par défaut partenaire P1
+npm run build
+// ou pour un partenaire particulier build:partenaire, exemple :
+npm run build:P2
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+vous pourrez ensuite exécuter l'application avec la commande
 
-### `yarn eject`
+```
+// dossier build par défaut, si utilisation des commandes build:P1, buildP2... lancer le dossier adéquat (buildP1, buildP2, ...)
+serve -s build
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+# Partie 1 : Résolution de la problématique
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Solution défini
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Pour rendre paramétrable l'application à chaque partenaire et fournir un build propre à chacun nous utilisons ici plusieurs méchanismes :
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+1. Mise en place d'un dossier ressource pour chaque partenaire contenant les différences potentielles (dictionnaire et logo dans notre cas). Un dossier "défaut" est mis en place dans un soucis de scalabilité pour ne pas avoir a répéter des valeurs identiques à la majorité des partenaires. (difficulté d'implémentation pour les images, voir point Difficulté d'implémentation)
+2. Injection du nom du partenaire spécifique au build par une variable d'environnement **ATTENTION les scripts implémentés ne fonctionne que sous windows**
+3. Récupération des ressources (dictionnaire, logo) propres du partenaire au runtime (les assets des autres partenaire devraient être supprimés dans un soucis de confidentialité lors du build, mais non implémenté) grâce au nom injecté au build
+4. Utiliser les ressources récupérées à l'endroit voulu
 
-## Learn More
+## Commentaire sur la problématique et son traitement
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Le sujet étant accès front-end, la réponse données est entièrement gérée en front-end. Cependant la gestion des ressources ici faite côté client (différents répertoires public / resources pour les partenaires) devrait être selon moi déportée dans le backend et récupérée grâce à une clé client (ceci permet d'alléger la taille du build front end, d'éviter certains problèmes d'implémentations et de plus simplement gérer une éventuelle problématique de confidentialité des ressources de chaque partenaire). Exemple simplifié :
+Le front envoie une requete get Ressources(P1) au back => back retourne dictionnaire et logo adapté.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Difficulté d'implémentation
 
-### Code Splitting
+L'import d'images locales (logo) (stockées dans le front) dynamique n'est pas pratique en React (car webpack ne peut mapper correctement les images au code que au build, et pour cela a besoin d'avoir un import avec un chemin en "dur". Les imports dynamiques ne permettent pas le bon déroulement de ce process).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Du à cela au lieu d'avoir des dossiers src/ressources/(default - P1 - P2 - P3) contenant chacun dictionaire et logo quand nécéssaire, les logos ont été mis dans le dossier /public/nomdupartenaire et chaque partenaire doit obligatoirement avoir un logo dans son dossier (donc P1 et P3 bien qu'utilisant le même logo utilise 2 ressources différentes copiées collées)
 
-### Analyzing the Bundle Size
+Une autre solution, plus élégante mais pouvant entrainer des problèmes de latence de chargement, aurait put être d'héberger les images ailleurs et de ne conserver que leurs urls dans le dossier ressources.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+# Partie 3 : CD
 
-### Making a Progressive Web App
+Pour faciliter le déploiement continue, en partant du principe que l'on désire un build propre à chaque partenaire, on a injecté le nom du partenaire au moment du build (voir partie 1 étape 2). Des scripts ont été mis en place pour générer ces builds (npm run build:P1, npm run build P2, ...). Pour améliorer encore le process, un script devrait générer les builds de tous les partenaires en fonction d'une liste de partenaire données (non implémenté) plutot que d'avoir un script par partenaire.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+# Screenshots
 
-### Advanced Configuration
+## Dev (combobox pour choisir le partenaire)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+![image](https://user-images.githubusercontent.com/34136072/113478090-e39a4980-9486-11eb-977d-c2ac689dd66c.png)
 
-### Deployment
+## Prod P1
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+![image](https://user-images.githubusercontent.com/34136072/113478048-a5048f00-9486-11eb-8263-3828855e6af5.png)
 
-### `yarn build` fails to minify
+## Prod P2
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify).
+![image](https://user-images.githubusercontent.com/34136072/113478066-ba79b900-9486-11eb-91dc-dce2c5fd4dd9.png)
+
+## Prod P3
+
+![image](https://user-images.githubusercontent.com/34136072/113478076-c8c7d500-9486-11eb-8018-3f13e5ac7163.png)
